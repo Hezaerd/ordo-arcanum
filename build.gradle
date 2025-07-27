@@ -7,6 +7,7 @@ def debugArgs = [
     "-enableassertions",
     "-Dmixin.debug.verify=true",
     "-Dmixin.debug.countInjections=true",
+    "-XX:+AllowEnhancedClassRedefinition"
 ]
 
 def static getSubprojectVersion(Project project) {
