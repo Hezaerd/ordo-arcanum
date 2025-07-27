@@ -1,15 +1,14 @@
 pluginManagement {
 	repositories {
+		gradlePluginPortal()
 		maven {
 			name = 'Fabric'
 			url = 'https://maven.fabricmc.net/'
 		}
-		gradlePluginPortal()
+		mavenCentral()
 	}
 }
 
 rootProject.name = 'ordo-arcanum'
 
-include 'lumos'
-include 'accio'
-include 'protego'
+include 'lumos', 'accio', 'protego'

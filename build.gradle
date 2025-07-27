@@ -1,21 +1,45 @@
 plugins {
     id 'fabric-loom' version "${loom_version}" apply false
-    id 'maven-publish'
+    id 'java-library'
 }
 
-allprojects {
-    group = 'com.hezaerd'
-    version = '1.0.0'
+def debugArgs = [
+    "-enableassertions",
+    "-Dmixin.debug.verify=true",
+    "-Dmixin.debug.countInjections=true",
+]
 
-    repositories {
-        // Common repositories
+def static getSubprojectVersion(Project project) {
+    def version = project.properties["${project.name}-version"]
+
+    if (!version) {
+        throw new NullPointerException("Could not find version for " + project.name + " in gradle.properties")
+    }
+
+    return version
+}
+
+def moduleDependencies(Project project, List<String> depNames) {
+    def deps = depNames.iterator().collect {
+        project.dependencies.project(path: ":$it", configuration: 'namedElements')
+    }
+
+    project.dependencies {
+        deps.each {
+            api it
+        }
     }
 }
 
-subprojects {
-    apply plugin: 'java'
+allprojects {
+    group = "com.hezaerd"
+    
+    apply plugin: 'java-library'
     apply plugin: 'fabric-loom'
-    apply plugin: 'maven-publish'
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 17
+    }
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -23,14 +47,84 @@ subprojects {
         withSourcesJar()
     }
 
-    tasks.withType(JavaCompile).configureEach {
-        it.options.release = 17
+    loom {
+        mixin {
+            useLegacyMixinAp = false
+        }
+
+        runs {
+            client {
+                client()
+                vmArgs(debugArgs)
+            }
+            server {
+                server()
+                vmArgs(debugArgs)
+            }
+        }
     }
 
-    // Use root LICENSE file for all projects
+    loom {
+        mixin {
+            useLegacyMixinAp = false
+        }
+
+        runs {
+            client {
+                client()
+                vmArgs(debugArgs)
+            }
+            server {
+                server()
+                vmArgs(debugArgs)
+            }
+        }
+    }
+
+    subprojects.each { p ->
+        loom.mods.register(p.name) {
+            sourceSet p.sourceSets.main
+        }
+    }
+
+    dependencies {
+        minecraft "com.mojang:minecraft:${minecraft_version}"
+        mappings "net.fabricmc:yarn:${yarn_mappings}"
+        modImplementation "net.fabricmc:fabric-loader:${loader_version}"
+        modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
+    }
+
+    tasks.withType(ProcessResources).configureEach {
+        inputs.property "version", project.version
+
+        filesMatching("fabric.mod.json") {
+            expand "version": inputs.properties.version
+        }
+    }
+
     jar {
         from(rootProject.file('LICENSE')) {
             rename { "${it}_${project.name}" }
+        }
+    }
+
+    loom.runs.configureEach {
+        vmArgs(debugArgs)
+    }
+}
+
+dependencies {
+    afterEvaluate {
+        subprojects.each {
+            api project(path: "${it.path}", configuration: "namedElements")
+        }
+    }
+}
+
+remapJar {
+    afterEvaluate {
+        subprojects.each {
+            nestedJars.from project("${it.path}").tasks.remapJar
         }
     }
 }
