@@ -1,0 +1,36 @@
+plugins {
+    id 'fabric-loom' version "${loom_version}" apply false
+    id 'maven-publish'
+}
+
+allprojects {
+    group = 'com.hezaerd'
+    version = '1.0.0'
+
+    repositories {
+        // Common repositories
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'fabric-loom'
+    apply plugin: 'maven-publish'
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+        withSourcesJar()
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        it.options.release = 17
+    }
+
+    // Use root LICENSE file for all projects
+    jar {
+        from(rootProject.file('LICENSE')) {
+            rename { "${it}_${project.name}" }
+        }
+    }
+}

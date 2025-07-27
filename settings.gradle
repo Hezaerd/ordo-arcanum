@@ -1,0 +1,15 @@
+pluginManagement {
+	repositories {
+		maven {
+			name = 'Fabric'
+			url = 'https://maven.fabricmc.net/'
+		}
+		gradlePluginPortal()
+	}
+}
+
+rootProject.name = 'ordo-arcanum'
+
+include 'lumos'
+include 'accio'
+include 'protego'
