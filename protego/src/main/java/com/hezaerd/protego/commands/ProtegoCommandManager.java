@@ -1,0 +1,72 @@
+package com.hezaerd.protego.commands;
+
+import com.hezaerd.protego.ModLib;
+import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.suggestion.SuggestionProvider;
+import net.minecraft.command.suggestion.SuggestionProviders;
+import net.minecraft.server.command.ServerCommandSource;
+import net.minecraft.text.Text;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Arrays;
+import java.util.List;
+
+public final class ProtegoCommandManager {
+    private static final Logger LOGGER = LoggerFactory.getLogger("protego-commands");
+
+    private ProtegoCommandManager() {}
+
+    /**
+     * Register all Protego commands
+     * @param dispatcher The command dispatcher
+     */
+    public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
+        BroadcastCommand.register(dispatcher);
+        LOGGER.info("Protego commands registered successfully");
+    }
+
+    /**
+     * Get broadcast type suggestions
+     */
+    public static final SuggestionProvider<ServerCommandSource> BROADCAST_TYPE_SUGGESTIONS = SuggestionProviders.register(
+            ModLib.id("broadcast_types"),
+            (context, builder) -> {
+                List<String> types = Arrays.asList("announcement", "alert", "info", "admin", "emergency");
+                for (String type : types) {
+                    builder.suggest(type);
+                }
+                return builder.buildFuture();
+            }
+    );
+
+    /**
+     * Send a formatted error message to the command source
+     * @param source The command source
+     * @param message The error message
+     */
+    public static void sendError(ServerCommandSource source, String message) {
+        Text errorText = Text.literal("§c[Protego] §f" + message);
+        source.sendMessage(errorText);
+    }
+
+    /**
+     * Send a formatted success message to the command source
+     * @param source The command source
+     * @param message The success message
+     */
+    public static void sendSuccess(ServerCommandSource source, String message) {
+        Text successText = Text.literal("§a[Protego] §f" + message);
+        source.sendMessage(successText);
+    }
+
+    /**
+     * Send a formatted info message to the command source
+     * @param source The command source
+     * @param message The info message
+     */
+    public static void sendInfo(ServerCommandSource source, String message) {
+        Text infoText = Text.literal("§b[Protego] §f" + message);
+        source.sendMessage(infoText);
+    }
+}

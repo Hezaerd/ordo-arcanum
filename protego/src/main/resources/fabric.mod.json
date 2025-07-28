@@ -17,6 +17,9 @@
 			"com.hezaerd.protego.Protego"
 		]
 	},
+	"mixins": [
+		"protego.mixin.json"
+	],
 	"depends": {
 		"fabricloader": ">=0.16.14",
 		"minecraft": "~1.20.1",
