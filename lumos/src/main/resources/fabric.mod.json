@@ -3,21 +3,17 @@
 	"id": "lumos",
 	"version": "${version}",
 	"name": "lumos",
-	"description": "This is an example description! Tell everyone what your mod is about!",
-	"authors": [
-		"Me!"
-	],
+	"description": "Lumos library mod for the Ordo Arcanum suite of mods (Protego: admin toolkit, Lumos: library, Accio: server utils and tools)",
+	"authors": ["Hezaerd"],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://hezaerd.com",
+		"sources": "https://github.com/Hezaerd/ordo-arcanum"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/lumos/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
-			"com.hezaerd.Lumos"
-		]
+		"main": ["com.hezaerd.Lumos"]
 	},
 	"mixins": [
 		"lumos.mixins.json"
@@ -29,6 +25,7 @@
 		"fabric-api": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"protego": "*",
+		"accio": "*"
 	}
 }

@@ -3,21 +3,17 @@
 	"id": "protego",
 	"version": "${version}",
 	"name": "protego",
-	"description": "This is an example description! Tell everyone what your mod is about!",
-	"authors": [
-		"Me!"
-	],
+	"description": "A comprehensive administrative toolkit mod designed to provide server owners and administrators with essential tools for server management.",
+	"authors": ["Hezaerd"],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"homepage": "https://hezaerd.com",
+		"sources": "https://github.com/Hezaerd/ordo-arcanum"
 	},
 	"license": "CC0-1.0",
 	"icon": "assets/protego/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
-			"com.hezaerd.Protego"
-		]
+		"main": ["com.hezaerd.Protego"]
 	},
 	"mixins": [
 		"protego.mixins.json"
@@ -26,9 +22,10 @@
 		"fabricloader": ">=0.16.14",
 		"minecraft": "~1.20.1",
 		"java": ">=17",
-		"fabric-api": "*"
+		"fabric-api": "*",
+		"lumos": "*"
 	},
 	"suggests": {
-		"another-mod": "*"
+		"accio": "*"
 	}
 }
