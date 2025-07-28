@@ -1,8 +1,8 @@
-package com.hezaerd;
+package com.hezaerd.accio;
 
 import net.fabricmc.api.ModInitializer;
 
-public class Lumos implements ModInitializer {
+public class Accio implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		try {

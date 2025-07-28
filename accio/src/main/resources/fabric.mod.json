@@ -13,11 +13,10 @@
 	"icon": "assets/accio/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": ["com.hezaerd.Accio"]
+		"main": [
+			"com.hezaerd.accio.Accio"
+		]
 	},
-	"mixins": [
-		"accio.mixins.json"
-	],
 	"depends": {
 		"fabricloader": ">=0.16.14",
 		"minecraft": "~1.20.1",

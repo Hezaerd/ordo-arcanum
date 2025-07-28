@@ -1,4 +1,4 @@
-package com.hezaerd;
+package com.hezaerd.protego;
 
 import net.fabricmc.api.ModInitializer;
 

@@ -13,11 +13,10 @@
 	"icon": "assets/protego/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": ["com.hezaerd.Protego"]
+		"main": [
+			"com.hezaerd.protego.Protego"
+		]
 	},
-	"mixins": [
-		"protego.mixins.json"
-	],
 	"depends": {
 		"fabricloader": ">=0.16.14",
 		"minecraft": "~1.20.1",
