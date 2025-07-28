@@ -34,7 +34,7 @@ def moduleDependencies(Project project, List<String> depNames) {
 
 allprojects {
     group = "com.hezaerd"
-    
+
     apply plugin: 'java-library'
     apply plugin: 'fabric-loom'
 
@@ -65,29 +65,12 @@ allprojects {
         }
     }
 
-    loom {
-        mixin {
-            useLegacyMixinAp = false
-        }
-
-        runs {
-            client {
-                client()
-                vmArgs(debugArgs)
-            }
-            server {
-                server()
-                vmArgs(debugArgs)
-            }
-        }
-    }
-
     subprojects.each { p ->
         loom.mods.register(p.name) {
             sourceSet p.sourceSets.main
         }
     }
-    
+
     repositories {
         maven {
             name = "TerraformersMC"
