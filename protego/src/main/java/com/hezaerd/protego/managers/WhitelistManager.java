@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 public final class WhitelistManager {
     private static volatile WhitelistManager instance;
@@ -29,6 +30,10 @@ public final class WhitelistManager {
         }
         return instance;
     }
+    
+    public boolean isInitialized() {
+        return initialized;
+    }
 
     public void initialize() {
         if (initialized) return;
@@ -44,8 +49,8 @@ public final class WhitelistManager {
         }
     }
 
-    // Whitelist Management Methods
 
+    // Whitelist Management Methods
     public CompletableFuture<Boolean> createWhitelist(String name, String displayName, String description, UUID createdBy) {
         return SharedDatabase.executeWithResult(conn -> {
             String sql = """
@@ -353,6 +358,13 @@ public final class WhitelistManager {
     public void clearCache() {
         whitelistCache.clear();
         playerWhitelistCache.clear();
+    }
+
+    // Synchronous method for suggestions
+    public List<String> getCachedWhitelistNames() {
+        return whitelistCache.keySet().stream()
+            .sorted()
+            .collect(Collectors.toList());
     }
 
     // Data Classes

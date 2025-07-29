@@ -353,12 +353,14 @@ public final class WhitelistCommand {
     public static final SuggestionProvider<ServerCommandSource> WHITELIST_NAME_SUGGESTIONS = SuggestionProviders.register(
         ModLib.id("whitelist_names"),
         (context, builder) -> {
-            WhitelistManager.getInstance().getAllWhitelists()
-                .thenAccept(whitelists -> {
-                    for (WhitelistManager.WhitelistInfo whitelist : whitelists) {
-                        builder.suggest(whitelist.getName());
-                    }
-                });
+            // Get whitelists from cache synchronously
+            WhitelistManager manager = WhitelistManager.getInstance();
+            if (manager.isInitialized()) {
+                List<String> whitelistNames = manager.getCachedWhitelistNames();
+                for (String name : whitelistNames) {
+                    builder.suggest(name);
+                }
+            }
             return builder.buildFuture();
         }
     );
