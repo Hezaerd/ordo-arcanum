@@ -89,9 +89,11 @@ allprojects {
         modImplementation "net.fabricmc.fabric-api:fabric-api:${fabric_version}"
 
         modImplementation "com.terraformersmc:modmenu:${modmenu_version}"
-        modImplementation "me.fzzyhmstrs:fzzy_config:${fzzyConfigVersion}" 
+        modImplementation "me.fzzyhmstrs:fzzy_config:${fzzyConfigVersion}"
 
         compileOnly "net.luckperms:api:${luckperms_version}"
+
+        api "com.h2database:h2:${h2_version}"
     }
 
     tasks.withType(ProcessResources).configureEach {

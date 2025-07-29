@@ -1,11 +1,13 @@
 package com.hezaerd.protego.commands;
 
+import com.hezaerd.lumos.text.RichText;
 import com.hezaerd.protego.ModLib;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
 import net.minecraft.command.suggestion.SuggestionProviders;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,6 +25,7 @@ public final class ProtegoCommandManager {
      */
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
         BroadcastCommand.register(dispatcher);
+        WhitelistCommand.register(dispatcher);
         LOGGER.info("Protego commands registered successfully");
     }
 
@@ -46,7 +49,7 @@ public final class ProtegoCommandManager {
      * @param message The error message
      */
     public static void sendError(ServerCommandSource source, String message) {
-        Text errorText = Text.literal("§c[Protego] §f" + message);
+        Text errorText = RichText.fromColorCodesWithPrefix("[Protego] ", Formatting.RED, message);
         source.sendMessage(errorText);
     }
 
@@ -56,7 +59,7 @@ public final class ProtegoCommandManager {
      * @param message The success message
      */
     public static void sendSuccess(ServerCommandSource source, String message) {
-        Text successText = Text.literal("§a[Protego] §f" + message);
+        Text successText = RichText.fromColorCodesWithPrefix("[Protego] ", Formatting.GREEN, message);
         source.sendMessage(successText);
     }
 
@@ -66,7 +69,7 @@ public final class ProtegoCommandManager {
      * @param message The info message
      */
     public static void sendInfo(ServerCommandSource source, String message) {
-        Text infoText = Text.literal("§b[Protego] §f" + message);
+        Text infoText = RichText.fromColorCodesWithPrefix("[Protego] ", Formatting.AQUA, message);
         source.sendMessage(infoText);
     }
 }
