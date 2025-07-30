@@ -1,6 +1,7 @@
 package com.hezaerd.accio.commands;
 
 import com.hezaerd.accio.chat.ChatTracker;
+import com.hezaerd.accio.registry.ModStats;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.context.CommandContext;
 import net.minecraft.server.command.ServerCommandSource;
@@ -44,12 +45,13 @@ public final class FeurCommand {
 
         if (triggerPlayer == null) {
             // No one said a trigger word recently, kick the command user
+            player.increaseStat(ModStats.FAILED_FEUR, 1);
             kickPlayer(player, "Feur");
-            AccioCommandManager.sendInfo(source, "No one said a trigger word recently. You got kicked for Feur!");
             return 1;
         }
 
         // Someone said a trigger word, kick them instead
+        player.increaseStat(ModStats.SUCCESS_FEUR, 1);
         kickPlayer(triggerPlayer, "Feur");
         AccioCommandManager.sendSuccess(source, "Successfully kicked " + triggerPlayer.getName().getString() + " for Feur! (said '" + triggerWord + "')");
 

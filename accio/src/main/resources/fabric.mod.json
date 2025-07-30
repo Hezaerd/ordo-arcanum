@@ -13,9 +13,8 @@
 	"icon": "assets/accio/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
-			"com.hezaerd.accio.Accio"
-		]
+		"main": ["com.hezaerd.accio.Accio"],
+		"fabric-datagen": ["com.hezaerd.accio.datagen.AccioDataGenerator"]
 	},
 	"mixins": [
 		"accio.mixin.json"

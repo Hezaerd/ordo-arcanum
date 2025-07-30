@@ -15,7 +15,6 @@ public final class ChatTracker {
         "quoi",
         "pk",
         "pourquoi",
-        "que",
         "kwa"
     );
 
