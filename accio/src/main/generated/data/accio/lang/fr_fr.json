@@ -1,0 +1,7 @@
+{
+  "stat.minecraft.dice_duels_lost": "Nombre de duels de dés perdus",
+  "stat.minecraft.dice_duels_tied": "Nombre de duels de dés nuls",
+  "stat.minecraft.dice_duels_won": "Nombre de duels de dés gagnés",
+  "stat.minecraft.failed_feur": "Nombre de /feur ratés",
+  "stat.minecraft.success_feur": "Nombre de /feur réussis"
+}

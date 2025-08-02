@@ -1,0 +1,7 @@
+{
+  "stat.minecraft.dice_duels_lost": "Amount of dice duels lost",
+  "stat.minecraft.dice_duels_tied": "Amount of dice duels tied",
+  "stat.minecraft.dice_duels_won": "Amount of dice duels won",
+  "stat.minecraft.failed_feur": "Amount of failed /feur",
+  "stat.minecraft.success_feur": "Amount of successful /feur"
+}
