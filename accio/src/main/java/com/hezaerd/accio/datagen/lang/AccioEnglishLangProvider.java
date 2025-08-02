@@ -28,6 +28,7 @@ public class AccioEnglishLangProvider extends ServerLanguageProvider {
         // Dice command help
         translationBuilder.add("command.accio.dice.help.title", "&6&lDice Duel Commands:");
         translationBuilder.add("command.accio.dice.help.challenge", "&e/dice duel <player> &7- Challenge a player to a dice duel");
+        translationBuilder.add("command.accio.dice.help.challenge_dice", "&e/dice duel <player> <dice> &7- Challenge with specific dice (d4, d6, d8, d12, d20, d100)");
         translationBuilder.add("command.accio.dice.help.accept", "&e/dice accept &7- Accept a pending duel challenge");
         translationBuilder.add("command.accio.dice.help.timeout", "&7Challenges expire after 30 seconds. Players have a 60-second cooldown between duels.");
 
@@ -41,10 +42,13 @@ public class AccioEnglishLangProvider extends ServerLanguageProvider {
         translationBuilder.add("command.accio.dice.error.no_challenge", "&cYou don't have any pending duel challenges.");
         translationBuilder.add("command.accio.dice.error.challenge_expired", "&cThe duel challenge has expired!");
         translationBuilder.add("command.accio.dice.error.challenger_offline", "&cThe challenger is no longer online.");
+        translationBuilder.add("command.accio.dice.error.invalid_dice", "&cInvalid dice type: &f%s&c. Available: d4, d6, d8, d12, d20, d100");
 
         // Dice duel messages
         translationBuilder.add("command.accio.dice.challenge.sent", "&aDuel challenge sent to &f%s&a! &7(30s timeout)");
+        translationBuilder.add("command.accio.dice.challenge.sent_with_dice", "&aDuel challenge sent to &f%s&a with &e%s&a! &7(30s timeout)");
         translationBuilder.add("command.accio.dice.challenge.received", "&f%s &ewants to confront you to a dice duel, type &a/dice accept &eto accept the duel. &7(30s timeout)");
+        translationBuilder.add("command.accio.dice.challenge.received_with_dice", "&f%s &ewants to confront you to a &e%s&e duel, type &a/dice accept &eto accept the duel. &7(30s timeout)");
         translationBuilder.add("command.accio.dice.duel.win", "&f%s &6wins with a &e%d &7vs &e%d&6!");
         translationBuilder.add("command.accio.dice.duel.tie", "&6It's a tie! Both rolled &e%d&6!");
         translationBuilder.add("command.accio.dice.duel.roll", "&bYou rolled: &e%d");

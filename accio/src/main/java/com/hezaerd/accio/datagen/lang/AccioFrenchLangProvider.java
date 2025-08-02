@@ -28,6 +28,7 @@ public class AccioFrenchLangProvider extends ServerLanguageProvider {
         // Dice command help
         translationBuilder.add("command.accio.dice.help.title", "&6&lCommandes de Duel de Dés:");
         translationBuilder.add("command.accio.dice.help.challenge", "&e/dice duel <joueur> &7- Défier un joueur à un duel de dés");
+        translationBuilder.add("command.accio.dice.help.challenge_dice", "&e/dice duel <joueur> <dés> &7- Défier avec des dés spécifiques (d4, d6, d8, d12, d20, d100)");
         translationBuilder.add("command.accio.dice.help.accept", "&e/dice accept &7- Accepter un défi de duel en attente");
         translationBuilder.add("command.accio.dice.help.timeout", "&7Les défis expirent après 30 secondes. Les joueurs ont un délai de 60 secondes entre les duels.");
 
@@ -40,11 +41,14 @@ public class AccioFrenchLangProvider extends ServerLanguageProvider {
         translationBuilder.add("command.accio.dice.error.pending_duel", "&cVous avez déjà un défi de duel en attente!");
         translationBuilder.add("command.accio.dice.error.no_challenge", "&cVous n'avez pas de défi de duel en attente.");
         translationBuilder.add("command.accio.dice.error.challenge_expired", "&cLe défi de duel a expiré!");
-        translationBuilder.add("command.accio.dice.error.challenger_offline", "&cLe challenger n'est plus en ligne.");
+                translationBuilder.add("command.accio.dice.error.challenger_offline", "&cLe challenger n'est plus en ligne.");
+        translationBuilder.add("command.accio.dice.error.invalid_dice", "&cType de dés invalide: &f%s&c. Disponible: d4, d6, d8, d12, d20, d100");
 
         // Dice duel messages
         translationBuilder.add("command.accio.dice.challenge.sent", "&aDéfi de duel envoyé à &f%s&a! &7(30s de délai)");
+        translationBuilder.add("command.accio.dice.challenge.sent_with_dice", "&aDéfi de duel envoyé à &f%s&a avec &e%s&a! &7(30s de délai)");
         translationBuilder.add("command.accio.dice.challenge.received", "&f%s &eveut vous confronter à un duel de dés, tapez &a/dice accept &epour accepter le duel. &7(30s de délai)");
+        translationBuilder.add("command.accio.dice.challenge.received_with_dice", "&f%s &eveut vous confronter à un duel &e%s&e, tapez &a/dice accept &epour accepter le duel. &7(30s de délai)");
         translationBuilder.add("command.accio.dice.duel.win", "&f%s &6gagne avec un &e%d &7contre &e%d&6!");
         translationBuilder.add("command.accio.dice.duel.tie", "&6C'est un match nul! Les deux ont fait &e%d&6!");
         translationBuilder.add("command.accio.dice.duel.roll", "&bVous avez fait: &e%d");

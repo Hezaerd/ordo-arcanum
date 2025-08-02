@@ -30,11 +30,14 @@ public final class DiceCommand {
     private static final long DUEL_TIMEOUT = 30000; // 30 seconds
     private static final long PLAYER_COOLDOWN = 60000; // 60 seconds (1 minute)
 
-    // Store pending duel requests: challenger -> target
+        // Store pending duel requests: challenger -> target
     private static final Map<String, String> pendingDuels = new HashMap<>();
 
     // Store challenge timestamps: challenger -> timestamp
     private static final Map<String, Long> challengeTimestamps = new HashMap<>();
+
+    // Store dice types for pending duels: challenger -> dice_type
+    private static final Map<String, String> pendingDiceTypes = new HashMap<>();
 
         // Store player cooldowns: player -> last challenge timestamp
     private static final Map<String, Long> playerCooldowns = new ConcurrentHashMap<>();
@@ -47,6 +50,27 @@ public final class DiceCommand {
         }
         return builder.buildFuture();
     };
+
+    // Suggestion provider for dice types
+    private static final SuggestionProvider<ServerCommandSource> DICE_TYPE_SUGGESTIONS = (context, builder) -> {
+        builder.suggest("d4");
+        builder.suggest("d6");
+        builder.suggest("d8");
+        builder.suggest("d12");
+        builder.suggest("d20");
+        builder.suggest("d100");
+        return builder.buildFuture();
+    };
+
+    // Available dice types and their sides
+    private static final Map<String, Integer> DICE_TYPES = Map.of(
+        "d4", 4,
+        "d6", 6,
+        "d8", 8,
+        "d12", 12,
+        "d20", 20,
+        "d100", 100
+    );
 
     private DiceCommand() {}
 
@@ -100,7 +124,7 @@ public final class DiceCommand {
         return (currentTime - timestamp) > DUEL_TIMEOUT;
     }
 
-    /**
+        /**
      * Clear expired challenges and cooldowns
      */
     private static void clearExpiredData() {
@@ -113,6 +137,10 @@ public final class DiceCommand {
         // Clear expired cooldowns
         playerCooldowns.entrySet().removeIf(entry ->
             (currentTime - entry.getValue()) > PLAYER_COOLDOWN);
+
+        // Clear expired dice types (same as challenges)
+        pendingDiceTypes.entrySet().removeIf(entry ->
+            (currentTime - challengeTimestamps.getOrDefault(entry.getKey(), 0L)) > DUEL_TIMEOUT);
     }
 
     /**
@@ -125,7 +153,10 @@ public final class DiceCommand {
                 .then(CommandManager.literal("duel")
                         .then(CommandManager.argument("target", StringArgumentType.word())
                                 .suggests(ONLINE_PLAYERS)
-                                .executes(DiceCommand::executeChallenge)))
+                                .executes(DiceCommand::executeChallenge)
+                                .then(CommandManager.argument("dice_type", StringArgumentType.word())
+                                        .suggests(DICE_TYPE_SUGGESTIONS)
+                                        .executes(DiceCommand::executeChallengeWithDice))))
                 .then(CommandManager.literal("accept")
                         .executes(DiceCommand::executeAccept)));
     }
@@ -146,6 +177,7 @@ public final class DiceCommand {
 
         source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.title"));
         source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.challenge"));
+        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.challenge_dice"));
         source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.accept"));
         source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.timeout"));
 
@@ -228,6 +260,90 @@ public final class DiceCommand {
         return 1;
     }
 
+    /**
+     * Execute the /dice duel command with a target player and dice type
+     * @param context The command context
+     * @return 1 if successful, 0 if failed
+     */
+    private static int executeChallengeWithDice(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        ServerPlayerEntity challenger = source.getPlayer();
+
+        if (challenger == null) {
+            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.players_only"));
+            return 0;
+        }
+
+        // Clear expired data first
+        clearExpiredData();
+
+        String challengerName = challenger.getName().getString();
+
+        // Check cooldown
+        if (isPlayerOnCooldown(challengerName)) {
+            long remainingCooldown = getRemainingCooldown(challengerName);
+            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.on_cooldown", remainingCooldown));
+            return 0;
+        }
+
+        String targetName = StringArgumentType.getString(context, "target");
+        String diceType = StringArgumentType.getString(context, "dice_type");
+        MinecraftServer server = source.getServer();
+        ServerPlayerEntity target = server.getPlayerManager().getPlayer(targetName);
+
+        if (target == null) {
+            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.player_offline", targetName));
+            return 0;
+        }
+
+        if (target.equals(challenger)) {
+            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.self_challenge"));
+            return 0;
+        }
+
+        String targetNameStr = target.getName().getString();
+
+        // Check if target is on cooldown
+        if (isPlayerOnCooldown(targetNameStr)) {
+            long remainingCooldown = getRemainingCooldown(targetNameStr);
+            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.target_on_cooldown", targetNameStr, remainingCooldown));
+            return 0;
+        }
+
+        // Check if there's already a pending duel
+        if (pendingDuels.containsKey(challengerName)) {
+            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.pending_duel"));
+            return 0;
+        }
+
+        // Validate dice type
+        if (!DICE_TYPES.containsKey(diceType)) {
+            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.invalid_dice", diceType));
+            return 0;
+        }
+
+        // Store the duel request with timestamp and dice type
+        pendingDuels.put(challengerName, targetNameStr);
+        challengeTimestamps.put(challengerName, System.currentTimeMillis());
+        pendingDiceTypes.put(challengerName, diceType);
+
+        // Send challenge message to target
+        Text challengeMessage = TextHelper.getTranslatedRichTextWithPrefix(
+            "[Dice Duel] ",
+            Formatting.GOLD,
+            "command.accio.dice.challenge.received_with_dice",
+            challengerName, diceType
+        );
+        target.sendMessage(challengeMessage);
+
+        // Send confirmation to challenger
+        source.sendMessage(TextHelper.getTranslatedRichTextWithPrefix("[Accio] ", Formatting.GREEN,
+            "command.accio.dice.challenge.sent_with_dice", targetNameStr, diceType));
+
+        LOGGER.info("Dice duel challenge: {} -> {} with {}", challengerName, targetNameStr, diceType);
+        return 1;
+    }
+
         /**
      * Execute the /dice accept command
      * @param context The command context
@@ -280,17 +396,21 @@ public final class DiceCommand {
             return 0;
         }
 
-        // Remove the pending duel and timestamp
+        // Get dice type for this duel
+        String diceType = pendingDiceTypes.getOrDefault(challengerName, "d6");
+
+        // Remove the pending duel, timestamp, and dice type
         pendingDuels.remove(challengerName);
         challengeTimestamps.remove(challengerName);
+        pendingDiceTypes.remove(challengerName);
 
         // Set cooldowns for both players
         long currentTime = System.currentTimeMillis();
         playerCooldowns.put(challengerName, currentTime);
         playerCooldowns.put(accepterName, currentTime);
 
-        // Execute the duel
-        executeDuel(challenger, accepter);
+        // Execute the duel with the specified dice type
+        executeDuel(challenger, accepter, diceType);
 
         return 1;
     }
@@ -301,9 +421,22 @@ public final class DiceCommand {
      * @param target The player who accepted the duel
      */
     private static void executeDuel(ServerPlayerEntity challenger, ServerPlayerEntity target) {
-        // Roll dice for both players (1-6)
-        int challengerRoll = RANDOM.nextInt(6) + 1;
-        int targetRoll = RANDOM.nextInt(6) + 1;
+        executeDuel(challenger, target, "d6"); // Default to d6
+    }
+
+    /**
+     * Execute the actual dice duel between two players with specified dice type
+     * @param challenger The player who initiated the duel
+     * @param target The player who accepted the duel
+     * @param diceType The type of dice to use
+     */
+    private static void executeDuel(ServerPlayerEntity challenger, ServerPlayerEntity target, String diceType) {
+        // Get dice sides
+        int diceSides = DICE_TYPES.getOrDefault(diceType, 6);
+
+        // Roll dice for both players
+        int challengerRoll = RANDOM.nextInt(diceSides) + 1;
+        int targetRoll = RANDOM.nextInt(diceSides) + 1;
 
         // Determine winner and track statistics
         if (challengerRoll > targetRoll) {
