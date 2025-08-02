@@ -20,6 +20,7 @@ public final class AccioCommandManager {
      */
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
         FeurCommand.register(dispatcher);
+        DiceCommand.register(dispatcher);
         LOGGER.info("Accio commands registered successfully");
     }
 

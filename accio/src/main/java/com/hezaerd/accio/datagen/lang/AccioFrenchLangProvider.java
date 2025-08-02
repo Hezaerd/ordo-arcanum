@@ -12,14 +12,43 @@ public class AccioFrenchLangProvider extends ServerLanguageProvider {
     @Override
     public void generateTranslations(FabricLanguageProvider.TranslationBuilder translationBuilder) {
         registerStats(translationBuilder);
+        registerDiceCommands(translationBuilder);
     }
 
     private void registerStats(FabricLanguageProvider.TranslationBuilder translationBuilder) {
         translationBuilder.add("stat.minecraft.failed_feur", "Nombre de /feur ratés");
         translationBuilder.add("stat.minecraft.success_feur", "Nombre de /feur réussis");
-        
+
         translationBuilder.add("stat.minecraft.dice_duels_won", "Nombre de duels de dés gagnés");
         translationBuilder.add("stat.minecraft.dice_duels_lost", "Nombre de duels de dés perdus");
         translationBuilder.add("stat.minecraft.dice_duels_tied", "Nombre de duels de dés nuls");
+    }
+
+        private void registerDiceCommands(FabricLanguageProvider.TranslationBuilder translationBuilder) {
+        // Dice command help
+        translationBuilder.add("command.accio.dice.help.title", "&6&lCommandes de Duel de Dés:");
+        translationBuilder.add("command.accio.dice.help.challenge", "&e/dice duel <joueur> &7- Défier un joueur à un duel de dés");
+        translationBuilder.add("command.accio.dice.help.accept", "&e/dice accept &7- Accepter un défi de duel en attente");
+        translationBuilder.add("command.accio.dice.help.timeout", "&7Les défis expirent après 30 secondes. Les joueurs ont un délai de 60 secondes entre les duels.");
+
+        // Dice command error messages
+        translationBuilder.add("command.accio.dice.error.players_only", "&cCette commande ne peut être utilisée que par les joueurs.");
+        translationBuilder.add("command.accio.dice.error.player_offline", "&cLe joueur '&f%s&c' n'est pas en ligne.");
+        translationBuilder.add("command.accio.dice.error.self_challenge", "&cVous ne pouvez pas vous défier vous-même à un duel de dés!");
+        translationBuilder.add("command.accio.dice.error.on_cooldown", "&cVous devez attendre &f%d&c secondes de plus avant de lancer un autre défi!");
+        translationBuilder.add("command.accio.dice.error.target_on_cooldown", "&c%s est en délai d'attente et ne peut pas être défié pendant &f%d&c secondes de plus!");
+        translationBuilder.add("command.accio.dice.error.pending_duel", "&cVous avez déjà un défi de duel en attente!");
+        translationBuilder.add("command.accio.dice.error.no_challenge", "&cVous n'avez pas de défi de duel en attente.");
+        translationBuilder.add("command.accio.dice.error.challenge_expired", "&cLe défi de duel a expiré!");
+        translationBuilder.add("command.accio.dice.error.challenger_offline", "&cLe challenger n'est plus en ligne.");
+
+        // Dice duel messages
+        translationBuilder.add("command.accio.dice.challenge.sent", "&aDéfi de duel envoyé à &f%s&a! &7(30s de délai)");
+        translationBuilder.add("command.accio.dice.challenge.received", "&f%s &eveut vous confronter à un duel de dés, tapez &a/dice accept &epour accepter le duel. &7(30s de délai)");
+        translationBuilder.add("command.accio.dice.duel.win", "&f%s &6gagne avec un &e%d &7contre &e%d&6!");
+        translationBuilder.add("command.accio.dice.duel.tie", "&6C'est un match nul! Les deux ont fait &e%d&6!");
+        translationBuilder.add("command.accio.dice.duel.roll", "&bVous avez fait: &e%d");
+        translationBuilder.add("command.accio.dice.duel.epic_victory", "&d&lÉPIQUE! &f%s &da obtenu un 6 parfait tandis que &f%s &da obtenu un 1! Quelle victoire écrasante!");
+        translationBuilder.add("command.accio.dice.duel.dramatic_tie", "&6&lLes deux joueurs ont fait le même score! C'est un match nul dramatique!");
     }
 }
