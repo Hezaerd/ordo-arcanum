@@ -16,6 +16,7 @@ public class FrenchServerLangProvider extends ServerLanguageProvider {
         registerBroadcastCommands(translationBuilder);
         registerGamemodeCommands(translationBuilder);
         registerWhitelistCommands(translationBuilder);
+        registerClsCommands(translationBuilder);
         registerBroadcastMessages(translationBuilder);
     }
 
@@ -103,6 +104,12 @@ public class FrenchServerLangProvider extends ServerLanguageProvider {
         translationBuilder.add(TranslationKeys.Commands.Whitelist.HELP_REMOVE_MULTIPLE, "&e/whitelist removemultiple <listes> <joueur> &7- Retirer un joueur de plusieurs listes blanches");
         translationBuilder.add(TranslationKeys.Commands.Whitelist.HELP_PLAYERS, "&e/whitelist players <liste> &7- Lister les joueurs dans une liste blanche");
         translationBuilder.add(TranslationKeys.Commands.Whitelist.HELP_PLAYER, "&e/whitelist player <joueur> &7- Afficher les listes blanches pour un joueur");
+    }
+
+    private void registerClsCommands(FabricLanguageProvider.TranslationBuilder translationBuilder) {
+        translationBuilder.add(TranslationKeys.Commands.Cls.ERROR_NO_PERMISSION, "&cVous n'avez pas la permission d'effacer le chat.");
+        translationBuilder.add(TranslationKeys.Commands.Cls.ERROR_PLAYERS_ONLY, "&cCette commande ne peut être utilisée que par les joueurs.");
+        translationBuilder.add(TranslationKeys.Commands.Cls.SUCCESS_CLEARED, "&aChat effacé avec succès.");
     }
 
     private void registerBroadcastMessages(FabricLanguageProvider.TranslationBuilder translationBuilder) {

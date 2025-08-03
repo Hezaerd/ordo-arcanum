@@ -115,6 +115,20 @@ public final class TranslationKeys {
             public static final String HELP_PLAYERS = "command.protego.whitelist.help.players";
             public static final String HELP_PLAYER = "command.protego.whitelist.help.player";
         }
+
+        /**
+         * Clear chat command translation keys
+         */
+        public static final class Cls {
+            private Cls() {}
+
+            // Error messages
+            public static final String ERROR_NO_PERMISSION = "command.protego.cls.error.no_permission";
+            public static final String ERROR_PLAYERS_ONLY = "command.protego.cls.error.players_only";
+
+            // Success messages
+            public static final String SUCCESS_CLEARED = "command.protego.cls.success.cleared";
+        }
     }
 
     /**

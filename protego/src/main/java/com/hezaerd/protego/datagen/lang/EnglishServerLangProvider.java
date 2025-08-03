@@ -16,6 +16,7 @@ public class EnglishServerLangProvider extends ServerLanguageProvider {
         registerBroadcastCommands(translationBuilder);
         registerGamemodeCommands(translationBuilder);
         registerWhitelistCommands(translationBuilder);
+        registerClsCommands(translationBuilder);
         registerBroadcastMessages(translationBuilder);
     }
 
@@ -103,6 +104,12 @@ public class EnglishServerLangProvider extends ServerLanguageProvider {
         translationBuilder.add(TranslationKeys.Commands.Whitelist.HELP_REMOVE_MULTIPLE, "&e/whitelist removemultiple <whitelists> <player> &7- Remove player from multiple whitelists");
         translationBuilder.add(TranslationKeys.Commands.Whitelist.HELP_PLAYERS, "&e/whitelist players <whitelist> &7- List players in a whitelist");
         translationBuilder.add(TranslationKeys.Commands.Whitelist.HELP_PLAYER, "&e/whitelist player <player> &7- Show whitelists for a player");
+    }
+
+    private void registerClsCommands(FabricLanguageProvider.TranslationBuilder translationBuilder) {
+        translationBuilder.add(TranslationKeys.Commands.Cls.ERROR_NO_PERMISSION, "&cYou don't have permission to clear the chat.");
+        translationBuilder.add(TranslationKeys.Commands.Cls.ERROR_PLAYERS_ONLY, "&cThis command can only be used by players.");
+        translationBuilder.add(TranslationKeys.Commands.Cls.SUCCESS_CLEARED, "&aChat cleared successfully.");
     }
 
     private void registerBroadcastMessages(FabricLanguageProvider.TranslationBuilder translationBuilder) {
