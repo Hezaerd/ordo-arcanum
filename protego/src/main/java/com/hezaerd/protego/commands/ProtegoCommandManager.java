@@ -26,6 +26,7 @@ public final class ProtegoCommandManager {
     public static void registerCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
         BroadcastCommand.register(dispatcher);
         WhitelistCommand.register(dispatcher);
+        GamemodeCommand.register(dispatcher);
         LOGGER.info("Protego commands registered successfully");
     }
 
