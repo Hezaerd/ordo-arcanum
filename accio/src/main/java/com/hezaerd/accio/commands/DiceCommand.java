@@ -3,6 +3,7 @@ package com.hezaerd.accio.commands;
 import com.hezaerd.lumos.text.RichText;
 import com.hezaerd.lumos.text.TextHelper;
 import com.hezaerd.accio.registry.ModStats;
+import com.hezaerd.accio.text.TranslationKeys;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -179,16 +180,16 @@ public final class DiceCommand {
         ServerPlayerEntity player = source.getPlayer();
 
         if (player == null) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.players_only"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_PLAYERS_ONLY));
             return 0;
         }
 
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.title"));
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.challenge"));
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.challenge_dice"));
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.accept"));
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.stats"));
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.timeout"));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.HELP_TITLE));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.HELP_CHALLENGE));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.HELP_CHALLENGE_DICE));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.HELP_ACCEPT));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.HELP_STATS));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.HELP_TIMEOUT));
 
         return 1;
     }
@@ -203,7 +204,7 @@ public final class DiceCommand {
         ServerPlayerEntity challenger = source.getPlayer();
 
         if (challenger == null) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.players_only"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_PLAYERS_ONLY));
             return 0;
         }
 
@@ -215,7 +216,7 @@ public final class DiceCommand {
         // Check cooldown
         if (isPlayerOnCooldown(challengerName)) {
             long remainingCooldown = getRemainingCooldown(challengerName);
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.on_cooldown", remainingCooldown));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_ON_COOLDOWN, remainingCooldown));
             return 0;
         }
 
@@ -224,12 +225,12 @@ public final class DiceCommand {
         ServerPlayerEntity target = server.getPlayerManager().getPlayer(targetName);
 
         if (target == null) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.player_offline", targetName));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_PLAYER_OFFLINE, targetName));
             return 0;
         }
 
         if (target.equals(challenger)) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.self_challenge"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_SELF_CHALLENGE));
             return 0;
         }
 
@@ -238,13 +239,13 @@ public final class DiceCommand {
         // Check if target is on cooldown
         if (isPlayerOnCooldown(targetNameStr)) {
             long remainingCooldown = getRemainingCooldown(targetNameStr);
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.target_on_cooldown", targetNameStr, remainingCooldown));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_TARGET_ON_COOLDOWN, targetNameStr, remainingCooldown));
             return 0;
         }
 
         // Check if there's already a pending duel
         if (pendingDuels.containsKey(challengerName)) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.pending_duel"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_PENDING_DUEL));
             return 0;
         }
 
@@ -256,14 +257,14 @@ public final class DiceCommand {
         Text challengeMessage = TextHelper.getTranslatedRichTextWithPrefix(
             "[Dice Duel] ",
             Formatting.GOLD,
-            "command.accio.dice.challenge.received",
+            TranslationKeys.Commands.Dice.CHALLENGE_RECEIVED,
             challengerName
         );
         target.sendMessage(challengeMessage);
 
         // Send confirmation to challenger
         source.sendMessage(TextHelper.getTranslatedRichTextWithPrefix("[Accio] ", Formatting.GREEN,
-            "command.accio.dice.challenge.sent", targetNameStr));
+            TranslationKeys.Commands.Dice.CHALLENGE_SENT, targetNameStr));
 
         LOGGER.info("Dice duel challenge: {} -> {}", challengerName, targetNameStr);
         return 1;
@@ -279,7 +280,7 @@ public final class DiceCommand {
         ServerPlayerEntity challenger = source.getPlayer();
 
         if (challenger == null) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.players_only"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_PLAYERS_ONLY));
             return 0;
         }
 
@@ -291,7 +292,7 @@ public final class DiceCommand {
         // Check cooldown
         if (isPlayerOnCooldown(challengerName)) {
             long remainingCooldown = getRemainingCooldown(challengerName);
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.on_cooldown", remainingCooldown));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_ON_COOLDOWN, remainingCooldown));
             return 0;
         }
 
@@ -301,12 +302,12 @@ public final class DiceCommand {
         ServerPlayerEntity target = server.getPlayerManager().getPlayer(targetName);
 
         if (target == null) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.player_offline", targetName));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_PLAYER_OFFLINE, targetName));
             return 0;
         }
 
         if (target.equals(challenger)) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.self_challenge"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_SELF_CHALLENGE));
             return 0;
         }
 
@@ -315,19 +316,19 @@ public final class DiceCommand {
         // Check if target is on cooldown
         if (isPlayerOnCooldown(targetNameStr)) {
             long remainingCooldown = getRemainingCooldown(targetNameStr);
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.target_on_cooldown", targetNameStr, remainingCooldown));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_TARGET_ON_COOLDOWN, targetNameStr, remainingCooldown));
             return 0;
         }
 
         // Check if there's already a pending duel
         if (pendingDuels.containsKey(challengerName)) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.pending_duel"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_PENDING_DUEL));
             return 0;
         }
 
         // Validate dice type
         if (!DICE_TYPES.containsKey(diceType)) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.invalid_dice", diceType));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_INVALID_DICE, diceType));
             return 0;
         }
 
@@ -340,14 +341,14 @@ public final class DiceCommand {
         Text challengeMessage = TextHelper.getTranslatedRichTextWithPrefix(
             "[Dice Duel] ",
             Formatting.GOLD,
-            "command.accio.dice.challenge.received_with_dice",
+            TranslationKeys.Commands.Dice.CHALLENGE_RECEIVED_WITH_DICE,
             challengerName, diceType
         );
         target.sendMessage(challengeMessage);
 
         // Send confirmation to challenger
         source.sendMessage(TextHelper.getTranslatedRichTextWithPrefix("[Accio] ", Formatting.GREEN,
-            "command.accio.dice.challenge.sent_with_dice", targetNameStr, diceType));
+            TranslationKeys.Commands.Dice.CHALLENGE_SENT_WITH_DICE, targetNameStr, diceType));
 
         LOGGER.info("Dice duel challenge: {} -> {} with {}", challengerName, targetNameStr, diceType);
         return 1;
@@ -363,7 +364,7 @@ public final class DiceCommand {
         ServerPlayerEntity accepter = source.getPlayer();
 
         if (accepter == null) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.players_only"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_PLAYERS_ONLY));
             return 0;
         }
 
@@ -382,13 +383,13 @@ public final class DiceCommand {
         }
 
         if (challengerName == null) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.no_challenge"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_NO_CHALLENGE));
             return 0;
         }
 
         // Check if the challenge has timed out
         if (isChallengeTimedOut(challengerName)) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.challenge_expired"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_CHALLENGE_EXPIRED));
             pendingDuels.remove(challengerName);
             challengeTimestamps.remove(challengerName);
             return 0;
@@ -399,7 +400,7 @@ public final class DiceCommand {
         ServerPlayerEntity challenger = server.getPlayerManager().getPlayer(challengerName);
 
         if (challenger == null) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.challenger_offline"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_CHALLENGER_OFFLINE));
             pendingDuels.remove(challengerName);
             challengeTimestamps.remove(challengerName);
             return 0;
@@ -466,22 +467,22 @@ public final class DiceCommand {
         Text duelResult;
         if (challengerRoll > targetRoll) {
             duelResult = TextHelper.getTranslatedRichTextWithPrefix("[Dice Duel] ", Formatting.YELLOW,
-                "command.accio.dice.duel.win", challenger.getName().getString(), challengerRoll, targetRoll);
+                TranslationKeys.Commands.Dice.DUEL_WIN, challenger.getName().getString(), challengerRoll, targetRoll);
         } else if (targetRoll > challengerRoll) {
             duelResult = TextHelper.getTranslatedRichTextWithPrefix("[Dice Duel] ", Formatting.YELLOW,
-                "command.accio.dice.duel.win", target.getName().getString(), targetRoll, challengerRoll);
+                TranslationKeys.Commands.Dice.DUEL_WIN, target.getName().getString(), targetRoll, challengerRoll);
         } else {
             duelResult = TextHelper.getTranslatedRichTextWithPrefix("[Dice Duel] ", Formatting.YELLOW,
-                "command.accio.dice.duel.tie", challengerRoll);
+                TranslationKeys.Commands.Dice.DUEL_TIE, challengerRoll);
         }
         challenger.sendMessage(duelResult);
         target.sendMessage(duelResult);
 
         // Send individual rolls to each player
         Text challengerRollMsg = TextHelper.getTranslatedRichTextWithPrefix("[Dice Duel] ", Formatting.AQUA,
-            "command.accio.dice.duel.roll", challengerRoll);
+            TranslationKeys.Commands.Dice.DUEL_ROLL, challengerRoll);
         Text targetRollMsg = TextHelper.getTranslatedRichTextWithPrefix("[Dice Duel] ", Formatting.AQUA,
-            "command.accio.dice.duel.roll", targetRoll);
+            TranslationKeys.Commands.Dice.DUEL_ROLL, targetRoll);
 
         challenger.sendMessage(challengerRollMsg);
         target.sendMessage(targetRollMsg);
@@ -489,17 +490,17 @@ public final class DiceCommand {
         // Send a fun message based on the result
         if (challengerRoll == 6 && targetRoll == 1) {
             Text epicMsg = TextHelper.getTranslatedRichTextWithPrefix("[Dice Duel] ", Formatting.LIGHT_PURPLE,
-                "command.accio.dice.duel.epic_victory", challenger.getName().getString(), target.getName().getString());
+                TranslationKeys.Commands.Dice.DUEL_EPIC_VICTORY, challenger.getName().getString(), target.getName().getString());
             challenger.sendMessage(epicMsg);
             target.sendMessage(epicMsg);
         } else if (targetRoll == 6 && challengerRoll == 1) {
             Text epicMsg = TextHelper.getTranslatedRichTextWithPrefix("[Dice Duel] ", Formatting.LIGHT_PURPLE,
-                "command.accio.dice.duel.epic_victory", target.getName().getString(), challenger.getName().getString());
+                TranslationKeys.Commands.Dice.DUEL_EPIC_VICTORY, target.getName().getString(), challenger.getName().getString());
             challenger.sendMessage(epicMsg);
             target.sendMessage(epicMsg);
         } else if (challengerRoll == targetRoll) {
             Text tieMsg = TextHelper.getTranslatedRichTextWithPrefix("[Dice Duel] ", Formatting.GOLD,
-                "command.accio.dice.duel.dramatic_tie");
+                TranslationKeys.Commands.Dice.DUEL_DRAMATIC_TIE);
             challenger.sendMessage(tieMsg);
             target.sendMessage(tieMsg);
         }
@@ -527,7 +528,7 @@ public final class DiceCommand {
         ServerPlayerEntity player = source.getPlayer();
 
         if (player == null) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.players_only"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_PLAYERS_ONLY));
             return 0;
         }
 
@@ -545,7 +546,7 @@ public final class DiceCommand {
         ServerPlayerEntity requester = source.getPlayer();
 
         if (requester == null) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.players_only"));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_PLAYERS_ONLY));
             return 0;
         }
 
@@ -554,7 +555,7 @@ public final class DiceCommand {
         ServerPlayerEntity targetPlayer = server.getPlayerManager().getPlayer(targetName);
 
         if (targetPlayer == null) {
-            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.player_offline", targetName));
+            source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.ERROR_PLAYER_OFFLINE, targetName));
             return 0;
         }
 
@@ -577,18 +578,18 @@ public final class DiceCommand {
 
         final double winRate = total > 0 ? (double) wins / (wins + losses) * 100 : 0;
 
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.header"));
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.title", player.getName().getString()));
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.separator"));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.STATS_HEADER));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.STATS_TITLE, player.getName().getString()));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.STATS_SEPARATOR));
 
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.total", total));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.STATS_TOTAL, total));
 
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.wins", wins));
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.losses", losses));
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.ties", ties));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.STATS_WINS, wins));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.STATS_LOSSES, losses));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.STATS_TIES, ties));
 
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.winrate", String.format("%.1f", winRate)));
-        
-        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.footer"));
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.STATS_WINRATE, String.format("%.1f", winRate)));
+
+        source.sendMessage(TextHelper.getTranslatedRichText(TranslationKeys.Commands.Dice.STATS_FOOTER));
     }
 }
