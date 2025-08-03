@@ -7,11 +7,14 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.suggestion.SuggestionProvider;
+import com.sun.jna.platform.win32.Winsock2;
 import net.minecraft.command.CommandSource;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.stat.ServerStatHandler;
+import net.minecraft.stat.Stats;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
 import org.slf4j.Logger;
@@ -158,7 +161,12 @@ public final class DiceCommand {
                                         .suggests(DICE_TYPE_SUGGESTIONS)
                                         .executes(DiceCommand::executeChallengeWithDice))))
                 .then(CommandManager.literal("accept")
-                        .executes(DiceCommand::executeAccept)));
+                        .executes(DiceCommand::executeAccept))
+                .then(CommandManager.literal("stats")
+                        .executes(DiceCommand::executeStats)
+                        .then(CommandManager.argument("player", StringArgumentType.word())
+                                .suggests(ONLINE_PLAYERS)
+                                .executes(DiceCommand::executeStatsForPlayer))));
     }
 
     /**
@@ -179,6 +187,7 @@ public final class DiceCommand {
         source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.challenge"));
         source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.challenge_dice"));
         source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.accept"));
+        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.stats"));
         source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.help.timeout"));
 
         return 1;
@@ -496,7 +505,7 @@ public final class DiceCommand {
         }
 
         // Log the duel result
-        LOGGER.info("Dice duel result: {} ({}) vs {} ({}): {}",
+        LOGGER.info("Dice duel result: {} ({}) vs {} ({})",
             challenger.getName().getString(), challengerRoll,
             target.getName().getString(), targetRoll);
     }
@@ -506,5 +515,80 @@ public final class DiceCommand {
      */
     public static void clearExpiredDuels() {
         clearExpiredData();
+    }
+
+    /**
+     * Execute the /dice stats command (show own stats)
+     * @param context The command context
+     * @return 1 if successful, 0 if failed
+     */
+    private static int executeStats(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        ServerPlayerEntity player = source.getPlayer();
+
+        if (player == null) {
+            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.players_only"));
+            return 0;
+        }
+
+        displayStats(source, player);
+        return 1;
+    }
+
+    /**
+     * Execute the /dice stats <player> command (show other player's stats)
+     * @param context The command context
+     * @return 1 if successful, 0 if failed
+     */
+    private static int executeStatsForPlayer(CommandContext<ServerCommandSource> context) {
+        ServerCommandSource source = context.getSource();
+        ServerPlayerEntity requester = source.getPlayer();
+
+        if (requester == null) {
+            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.players_only"));
+            return 0;
+        }
+
+        String targetName = StringArgumentType.getString(context, "player");
+        MinecraftServer server = source.getServer();
+        ServerPlayerEntity targetPlayer = server.getPlayerManager().getPlayer(targetName);
+
+        if (targetPlayer == null) {
+            source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.error.player_offline", targetName));
+            return 0;
+        }
+
+        displayStats(source, targetPlayer);
+        return 1;
+    }
+
+    /**
+     * Display beautiful stats for a player
+     * @param source The command source
+     * @param player The player to show stats for
+     */
+    private static void displayStats(ServerCommandSource source, ServerPlayerEntity player) {
+        ServerStatHandler statHandler = player.getStatHandler();
+
+        final int wins = statHandler.getStat(Stats.CUSTOM, ModStats.DICE_DUELS_WON);
+        final int losses = statHandler.getStat(Stats.CUSTOM, ModStats.DICE_DUELS_LOST);
+        final int ties = statHandler.getStat(Stats.CUSTOM, ModStats.DICE_DUELS_TIED);
+        final int total = wins + losses + ties;
+
+        final double winRate = total > 0 ? (double) wins / (wins + losses) * 100 : 0;
+
+        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.header"));
+        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.title", player.getName().getString()));
+        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.separator"));
+
+        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.total", total));
+
+        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.wins", wins));
+        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.losses", losses));
+        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.ties", ties));
+
+        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.winrate", String.format("%.1f", winRate)));
+        
+        source.sendMessage(TextHelper.getTranslatedRichText("command.accio.dice.stats.footer"));
     }
 }

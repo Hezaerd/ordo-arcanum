@@ -4,8 +4,8 @@ import com.hezaerd.lumos.datagen.provider.ServerLanguageProvider;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
 
-public class AccioFrenchLangProvider extends ServerLanguageProvider {
-    public AccioFrenchLangProvider(FabricDataOutput dataOutput) {
+public class FrenchServerLangProvider extends ServerLanguageProvider {
+    public FrenchServerLangProvider(FabricDataOutput dataOutput) {
         super(dataOutput, "fr_fr");
     }
 
@@ -42,7 +42,7 @@ public class AccioFrenchLangProvider extends ServerLanguageProvider {
         translationBuilder.add("command.accio.dice.error.pending_duel", "&cVous avez déjà un défi de duel en attente!");
         translationBuilder.add("command.accio.dice.error.no_challenge", "&cVous n'avez pas de défi de duel en attente.");
         translationBuilder.add("command.accio.dice.error.challenge_expired", "&cLe défi de duel a expiré!");
-        translationBuilder.add("command.accio.dice.error.challenger_offline", "&cLe challenger n'est plus en ligne.");
+                translationBuilder.add("command.accio.dice.error.challenger_offline", "&cLe challenger n'est plus en ligne.");
         translationBuilder.add("command.accio.dice.error.invalid_dice", "&cType de dés invalide: &f%s&c. Disponible: d4, d6, d8, d12, d20, d100");
 
         // Dice duel messages

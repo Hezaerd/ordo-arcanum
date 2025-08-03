@@ -1,8 +1,8 @@
 package com.hezaerd.accio.datagen;
 
 import com.hezaerd.accio.ModLib;
-import com.hezaerd.accio.datagen.lang.AccioEnglishLangProvider;
-import com.hezaerd.accio.datagen.lang.AccioFrenchLangProvider;
+import com.hezaerd.accio.datagen.lang.EnglishServerLangProvider;
+import com.hezaerd.accio.datagen.lang.FrenchServerLangProvider;
 import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
@@ -17,7 +17,7 @@ public class AccioDataGenerator implements DataGeneratorEntrypoint {
     }
     
     private void registerLangs(FabricDataGenerator.Pack pack) {
-        pack.addProvider(AccioEnglishLangProvider::new);
-        pack.addProvider(AccioFrenchLangProvider::new);
+        pack.addProvider(EnglishServerLangProvider::new);
+        pack.addProvider(FrenchServerLangProvider::new);
     }
 }
