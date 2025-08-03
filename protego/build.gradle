@@ -1,3 +1,15 @@
 version = getSubprojectVersion(project)
 
 moduleDependencies(project, ['lumos'])
+
+fabricApi {
+    configureDataGeneration()
+}
+
+repositories {
+    maven { url 'https://maven.nucleoid.xyz' }
+}
+
+dependencies {
+    modImplementation include("xyz.nucleoid:server-translations-api:2.0.0+1.20")
+}

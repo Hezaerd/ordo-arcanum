@@ -1,6 +1,8 @@
 package com.hezaerd.protego.managers;
 
 import com.hezaerd.lumos.text.RichText;
+import com.hezaerd.lumos.text.TextHelper;
+import com.hezaerd.protego.text.TranslationKeys;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.MutableText;
@@ -15,20 +17,20 @@ public final class BroadcastManager {
     private static final Logger LOGGER = LoggerFactory.getLogger("protego-broadcast");
 
     public enum BroadcastType {
-        ANNOUNCEMENT("[Announcement]", Formatting.GOLD),
-        ALERT("[Alert]", Formatting.RED),
-        INFO("[Info]", Formatting.AQUA);
+        ANNOUNCEMENT(TranslationKeys.Broadcast.ANNOUNCEMENT_PREFIX, Formatting.GOLD),
+        ALERT(TranslationKeys.Broadcast.ALERT_PREFIX, Formatting.RED),
+        INFO(TranslationKeys.Broadcast.INFO_PREFIX, Formatting.AQUA);
 
-        private final String prefix;
+        private final String prefixKey;
         private final Formatting color;
 
-        BroadcastType(String prefix, Formatting color) {
-            this.prefix = prefix;
+        BroadcastType(String prefixKey, Formatting color) {
+            this.prefixKey = prefixKey;
             this.color = color;
         }
 
         public String getPrefix() {
-            return prefix;
+            return TextHelper.getTranslatedString(prefixKey);
         }
 
         public Formatting getColor() {
@@ -117,16 +119,16 @@ public final class BroadcastManager {
      * @return Formatted Text component
      */
     private static Text createBroadcastText(BroadcastType type, String message) {
-        // Create colored prefix
-        MutableText prefixText = Text.literal(type.getPrefix()).formatted(type.getColor());
+        // Create colored prefix with RichText support
+        Text prefixText = RichText.fromColorCodes(type.getPrefix());
 
-        // Create message text with rich text support (no pre-formatting)
+        // Create message text with rich text support
         // Add reset formatting at the beginning to prevent inheriting prefix formatting
         String messageWithReset = "&f" + message;
         Text messageText = RichText.fromColorCodes(messageWithReset);
 
         // Combine prefix and message with a space
-        return prefixText.append(Text.literal(" ")).append(messageText);
+        return Text.literal("").append(prefixText).append(Text.literal(" ")).append(messageText);
     }
 
     /**

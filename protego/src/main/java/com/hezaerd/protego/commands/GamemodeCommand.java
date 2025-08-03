@@ -1,5 +1,7 @@
 package com.hezaerd.protego.commands;
 
+import com.hezaerd.lumos.text.TextHelper;
+import com.hezaerd.protego.text.TranslationKeys;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -65,19 +67,19 @@ public final class GamemodeCommand {
         ServerPlayerEntity player = source.getPlayer();
 
         if (player == null) {
-            ProtegoCommandManager.sendError(source, "This command can only be used by players.");
+            ProtegoCommandManager.sendError(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Gamemode.ERROR_PLAYERS_ONLY));
             return 0;
         }
 
         GameMode gameMode = parseGamemode(modeArg);
         if (gameMode == null) {
-            ProtegoCommandManager.sendError(source, "Invalid gamemode. Use: 0 (survival), 1 (creative), 2 (adventure), 3 (spectator)");
+            ProtegoCommandManager.sendError(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Gamemode.ERROR_INVALID_GAMEMODE));
             return 0;
         }
 
         // Check if player has permission to change gamemode
         if (checkGamemodePermission(source)) {
-            ProtegoCommandManager.sendError(source, "You don't have permission to change gamemode.");
+            ProtegoCommandManager.sendError(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Gamemode.ERROR_NO_PERMISSION));
             return 0;
         }
 
@@ -85,7 +87,7 @@ public final class GamemodeCommand {
         player.changeGameMode(gameMode);
 
         String modeName = getGamemodeName(gameMode);
-        ProtegoCommandManager.sendSuccess(source, "Gamemode changed to " + modeName);
+        ProtegoCommandManager.sendSuccess(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Gamemode.SUCCESS_CHANGED_SELF, modeName));
 
         return 1;
     }
@@ -102,13 +104,13 @@ public final class GamemodeCommand {
 
         GameMode gameMode = parseGamemode(modeArg);
         if (gameMode == null) {
-            ProtegoCommandManager.sendError(source, "Invalid gamemode. Use: 0 (survival), 1 (creative), 2 (adventure), 3 (spectator)");
+            ProtegoCommandManager.sendError(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Gamemode.ERROR_INVALID_GAMEMODE));
             return 0;
         }
 
         // Check if player has permission to change gamemode
         if (checkGamemodePermission(source)) {
-            ProtegoCommandManager.sendError(source, "You don't have permission to change gamemode.");
+            ProtegoCommandManager.sendError(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Gamemode.ERROR_NO_PERMISSION));
             return 0;
         }
 
@@ -116,7 +118,7 @@ public final class GamemodeCommand {
         target.changeGameMode(gameMode);
 
         String modeName = getGamemodeName(gameMode);
-        ProtegoCommandManager.sendSuccess(source, "Changed " + target.getName().getString() + "'s gamemode to " + modeName);
+        ProtegoCommandManager.sendSuccess(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Gamemode.SUCCESS_CHANGED_TARGET, target.getName().getString(), modeName));
 
         return 1;
     }
@@ -164,10 +166,10 @@ public final class GamemodeCommand {
      */
     private static String getGamemodeName(GameMode gameMode) {
         return switch (gameMode) {
-            case SURVIVAL -> "Survival";
-            case CREATIVE -> "Creative";
-            case ADVENTURE -> "Adventure";
-            case SPECTATOR -> "Spectator";
+            case SURVIVAL -> TextHelper.getTranslatedString(TranslationKeys.Commands.Gamemode.GAMEMODE_SURVIVAL);
+            case CREATIVE -> TextHelper.getTranslatedString(TranslationKeys.Commands.Gamemode.GAMEMODE_CREATIVE);
+            case ADVENTURE -> TextHelper.getTranslatedString(TranslationKeys.Commands.Gamemode.GAMEMODE_ADVENTURE);
+            case SPECTATOR -> TextHelper.getTranslatedString(TranslationKeys.Commands.Gamemode.GAMEMODE_SPECTATOR);
         };
     }
 }

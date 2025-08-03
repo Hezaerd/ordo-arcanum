@@ -13,9 +13,8 @@
 	"icon": "assets/protego/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
-			"com.hezaerd.protego.Protego"
-		]
+		"main": ["com.hezaerd.protego.Protego"],
+		"fabric-datagen": ["com.hezaerd.protego.datagen.ProtegoDataGenerator"]
 	},
 	"mixins": [
 		"protego.mixin.json"

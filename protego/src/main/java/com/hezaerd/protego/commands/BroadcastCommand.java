@@ -1,7 +1,9 @@
 package com.hezaerd.protego.commands;
 
+import com.hezaerd.lumos.text.TextHelper;
 import com.hezaerd.protego.managers.BroadcastManager;
 import com.hezaerd.protego.permissions.PermissionManager;
+import com.hezaerd.protego.text.TranslationKeys;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
@@ -67,11 +69,12 @@ public final class BroadcastCommand {
         ServerCommandSource source = context.getSource();
 
         if (checkPermission(source, "protego.broadcast")) {
-            ProtegoCommandManager.sendError(source, "You don't have permission to use this command.");
+            ProtegoCommandManager.sendError(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Broadcast.ERROR_NO_PERMISSION));
             return 0;
         }
 
         BroadcastManager.broadcast(source.getServer(), BroadcastManager.BroadcastType.ANNOUNCEMENT, message);
+        ProtegoCommandManager.sendSuccess(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Broadcast.SUCCESS_ANNOUNCEMENT));
 
         return 1;
     }
@@ -81,11 +84,12 @@ public final class BroadcastCommand {
         ServerCommandSource source = context.getSource();
 
         if (checkPermission(source, "protego.broadcast")) {
-            ProtegoCommandManager.sendError(source, "You don't have permission to use this command.");
+            ProtegoCommandManager.sendError(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Broadcast.ERROR_NO_PERMISSION));
             return 0;
         }
 
         BroadcastManager.broadcast(source.getServer(), BroadcastManager.BroadcastType.ALERT, message);
+        ProtegoCommandManager.sendSuccess(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Broadcast.SUCCESS_ALERT));
 
         return 1;
     }
@@ -95,11 +99,12 @@ public final class BroadcastCommand {
         ServerCommandSource source = context.getSource();
 
         if (checkPermission(source, "protego.broadcast")) {
-            ProtegoCommandManager.sendError(source, "You don't have permission to use this command.");
+            ProtegoCommandManager.sendError(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Broadcast.ERROR_NO_PERMISSION));
             return 0;
         }
 
         BroadcastManager.broadcast(source.getServer(), BroadcastManager.BroadcastType.INFO, message);
+        ProtegoCommandManager.sendSuccess(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Broadcast.SUCCESS_INFO));
 
         return 1;
     }
@@ -109,11 +114,12 @@ public final class BroadcastCommand {
         ServerCommandSource source = context.getSource();
 
         if (checkPermission(source, "protego.broadcast.raw")) {
-            ProtegoCommandManager.sendError(source, "You don't have permission to use raw broadcasts.");
+            ProtegoCommandManager.sendError(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Broadcast.ERROR_NO_PERMISSION));
             return 0;
         }
 
         BroadcastManager.sendRawMessage(source.getServer(), message);
+        ProtegoCommandManager.sendSuccess(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Broadcast.SUCCESS_RAW));
 
         return 1;
     }
@@ -124,11 +130,12 @@ public final class BroadcastCommand {
         ServerCommandSource source = context.getSource();
 
         if (checkPermission(source, "protego.broadcast.target")) {
-            ProtegoCommandManager.sendError(source, "You don't have permission to use targeted broadcasts.");
+            ProtegoCommandManager.sendError(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Broadcast.ERROR_NO_PERMISSION));
             return 0;
         }
 
         BroadcastManager.broadcastToPermission(source.getServer(), BroadcastManager.BroadcastType.INFO, message, permission);
+        ProtegoCommandManager.sendSuccess(source, TextHelper.getTranslatedString(TranslationKeys.Commands.Broadcast.SUCCESS_TO_PERMISSION));
 
         return 1;
     }
