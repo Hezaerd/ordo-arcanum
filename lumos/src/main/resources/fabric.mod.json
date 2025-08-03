@@ -13,9 +13,7 @@
 	"icon": "assets/lumos/icon.png",
 	"environment": "*",
 	"entrypoints": {
-		"main": [
-			"com.hezaerd.lumos.Lumos"
-		]
+		"main": ["com.hezaerd.lumos.Lumos"]
 	},
 	"depends": {
 		"fabricloader": ">=0.16.14",
@@ -23,8 +21,12 @@
 		"java": ">=17",
 		"fabric-api": "*"
 	},
-	"suggests": {
+	"recommends": {
 		"protego": "*",
 		"accio": "*"
+	},
+	"suggests": {
+		"fabric-permissions-api-v0": "~0.3.3",
+		"luckperms": "~5.4"
 	}
 }

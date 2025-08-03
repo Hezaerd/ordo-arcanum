@@ -90,9 +90,7 @@ allprojects {
 
         modImplementation "com.terraformersmc:modmenu:${modmenu_version}"
         modImplementation "me.fzzyhmstrs:fzzy_config:${fzzyConfigVersion}"
-
-        compileOnly "net.luckperms:api:${luckperms_version}"
-
+        
         api "com.h2database:h2:${h2_version}"
     }
 
