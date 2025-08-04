@@ -10,7 +10,7 @@ public class Accio implements ModInitializer {
 	public void onInitialize() {
 		try {
 			ModStats.init();
-			
+
 			CommandRegistrationCallback.EVENT.register((dispatcher, registryAccess, environment) -> {
 				AccioCommandManager.registerCommands(dispatcher);
 			});

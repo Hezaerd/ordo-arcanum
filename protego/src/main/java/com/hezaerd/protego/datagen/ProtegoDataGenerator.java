@@ -7,17 +7,17 @@ import net.fabricmc.fabric.api.datagen.v1.DataGeneratorEntrypoint;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataGenerator;
 
 public class ProtegoDataGenerator implements DataGeneratorEntrypoint {
-    @Override
-    public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
-        FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
+	@Override
+	public void onInitializeDataGenerator(FabricDataGenerator fabricDataGenerator) {
+		FabricDataGenerator.Pack pack = fabricDataGenerator.createPack();
 
-        registerLangs(pack);
+		registerLangs(pack);
 
-        ModLib.LOGGER.info("Protego data generator initialized");
-    }
+		ModLib.LOGGER.info("Protego data generator initialized");
+	}
 
-    private void registerLangs(FabricDataGenerator.Pack pack) {
-        pack.addProvider(EnglishServerLangProvider::new);
-        pack.addProvider(FrenchServerLangProvider::new);
-    }
+	private void registerLangs(FabricDataGenerator.Pack pack) {
+		pack.addProvider(EnglishServerLangProvider::new);
+		pack.addProvider(FrenchServerLangProvider::new);
+	}
 }
