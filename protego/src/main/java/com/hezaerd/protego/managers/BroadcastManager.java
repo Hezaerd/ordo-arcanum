@@ -103,7 +103,7 @@ public final class BroadcastManager {
 		int sentCount = 0;
 
 		for (ServerPlayerEntity player : players) {
-			if (com.hezaerd.protego.permissions.PermissionManager.hasPermission(player, permission)) {
+			if (com.hezaerd.lumos.permissions.Permissions.check(player.getCommandSource(), permission, false)) {
 				player.sendMessage(broadcastText);
 				sentCount++;
 			}

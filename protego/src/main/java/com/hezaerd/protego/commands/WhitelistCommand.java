@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
+import com.hezaerd.lumos.permissions.Permissions;
 import com.hezaerd.lumos.text.RichText;
 import com.hezaerd.lumos.text.TextHelper;
 import com.hezaerd.protego.ModLib;
@@ -30,7 +31,7 @@ public final class WhitelistCommand {
 	public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
 		ModLib.LOGGER.info("Registering whitelist commands");
 		dispatcher.register(literal("whitelist")
-			.requires(source -> source.hasPermissionLevel(2))
+			.requires(source -> Permissions.check(source, "protego.whitelist", 2))
 			.executes(WhitelistCommand::executeHelp)
 			.then(literal("help")
 				.executes(WhitelistCommand::executeHelp))
